@@ -1,0 +1,39 @@
+name: Create Branch
+on:
+  issues:
+    types:
+      - opened
+jobs:
+  create-branch:
+    name: Create GitHub Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Issue Parser
+        uses: stefanbuck/github-issue-praser@v3
+        id: issue-parser
+        with:
+          template-path: .github/ISSUE_TEMPLATE/issue_form.yml
+
+      - name: Log Issue Parser
+        run: |
+          echo '${{ steps.issue-parser.outputs.jsonString }}'
+
+      - name: Create branch with Task Id
+        run: |
+          ISSUE_NUMBER="${{ steps.issue-parser.outputs.issueparser_taskKey }}"
+          ISSUE_PREFIX="${{ steps.issue-parser.outputs.issueparser_branchPrefix }}"
+          BRANCH_NAME="${ISSUE_PREFIX}/${ISSUE_NUMBER}"
+          git checkout -b "${BRANCH_NAME}"
+          git push origin "${BRANCH_NAME}"
+
+      - name: Update issue title
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "update-issue"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "[${{steps.issue-parser.outputs.issueparser_branchPrefix}}: ${{steps.issue-parser.outputs.issueparser_taskKey }}] ${{ github.event.issue.title }}"

@@ -1,0 +1,42 @@
+name: "이슈 생성"
+description: "GitHub 레포지토리에 이슈를 생성합니다."
+labels: [order]
+title: "이슈 이름을 작성해주세요."
+body:
+  - type: input
+    id: taskKey
+    attributes:
+      label: "작업 ID"
+      description: "Notion 에 작성된 작업 ID를 기재해주세요"
+      placeholder: "SOL-00"
+    validations:
+      required: true
+
+  - type: input
+    id: branchPrefix
+    attributes:
+      label: "브랜치 전략(GitFlow)"
+      description: "feat/fix/docs/style/refactor/test/chore 중 해당 이슈와 걸맞게 작성해주세요."
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: "상세 내용(Details)"
+      description: "이슈 내용을 자세히 설명해주세요."
+      value: |
+        - 상세 내용에 대해 작성해주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: "체크리스트(Tasks)"
+      description: "해당 이슈에 대해 필요한 작업 목록을 작성해주세요."
+      value: |
+        - [ ] Task1
+        - [ ] Task2
+    validations:
+      required: true
