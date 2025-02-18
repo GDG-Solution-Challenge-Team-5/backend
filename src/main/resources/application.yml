@@ -20,3 +20,7 @@ jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 
+logging:
+  level:
+    com.example.backend: DEBUG
+
